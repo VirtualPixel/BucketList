@@ -41,17 +41,17 @@ struct ContentView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Button {
-                            viewModel.addLocation()
-                        } label: {
-                            Image(systemName: "plus")
-                        }
+                        
+                        Image(systemName: "plus")
                         .padding()
                         .background(.black.opacity(0.75))
                         .foregroundColor(.white)
                         .font(.title)
                         .clipShape(Circle())
                         .padding(.trailing)
+                        .onTapGesture {
+                            viewModel.addLocation()
+                        }
                     }
                 }
             } else {
@@ -63,12 +63,18 @@ struct ContentView: View {
                 .foregroundColor(.white)
                 .clipShape(Capsule())
             }
+            
         }
         .sheet(item: $viewModel.selectedPlace) { place in
             EditView(location: place) {
                 viewModel.update(location: $0)
             }
         }
+        .alert("Error!", isPresented: $viewModel.showingError, actions: {
+            
+        }, message: {
+            Text("\(viewModel.errorMessage)")
+        })
         
     }
 }

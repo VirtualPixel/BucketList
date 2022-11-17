@@ -3,7 +3,7 @@
 //  BucketList
 //
 //  Created by Justin Wells on 11/14/22.
-//
+// Re-arranged
 
 import Foundation
 import MapKit
@@ -15,6 +15,8 @@ extension ContentView {
         @Published private(set) var locations: [Location]
         @Published var selectedPlace: Location?
         @Published var isUnlocked = false
+        @Published var showingError = false
+        @Published var errorMessage = ""
         let savePath = FileManager.documentsDirectory.appendingPathComponent("SavedPlaces")
         
         init() {
@@ -66,7 +68,8 @@ extension ContentView {
                             self.isUnlocked = true
                         }
                     } else {
-                        // error
+                        self.errorMessage = "There was an error in authentication!"
+                        self.showingError = true
                     }
                 }
             } else {
@@ -75,3 +78,4 @@ extension ContentView {
         }
     }
 }
+
