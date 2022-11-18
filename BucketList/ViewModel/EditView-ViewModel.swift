@@ -5,16 +5,21 @@
 //  Created by Justin Wells on 11/16/22.
 //
 
-import Foundation
 import SwiftUI
 
 extension EditView {
     @MainActor class ViewModel: ObservableObject {
+        enum LoadingState {
+            case loading, loaded, failed
+        }
+        
         @Published var name: String
-        @Published var location: Location
         @Published var description: String
+        
         @Published var loadingState = LoadingState.loading
         @Published var pages = [Page]()
+        
+        var location: Location
         
         init(location: Location) {
             self.location = location
@@ -45,9 +50,31 @@ extension EditView {
                     loadingState = .failed
                 }
         }
+        
+        func createLocatin() -> Location {
+            var newLocation = location
+            newLocation.id = UUID()
+            newLocation.name = name
+            newLocation.description = description
+            
+            return newLocation
+        }
+        
+        @ViewBuilder func getNearbyResults() -> some View {
+            switch loadingState {
+                case .loaded:
+                    ForEach(pages, id: \.pageid) { page in
+                        Text(page.title)
+                            .font(.headline)
+                        + Text(": ") +
+                        Text(page.description)
+                            .italic()
+                    }
+                case .loading:
+                    Text("Loading...")
+                case .failed:
+                    Text("Please try again later.")
+                }
+        }
     }
-}
-
-enum LoadingState {
-    case loading, loaded, failed
 }

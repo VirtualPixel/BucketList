@@ -22,31 +22,13 @@ struct EditView: View {
                 }
                 
                 Section("Nearby...") {
-                    switch viewModel.loadingState {
-                        case .loaded:
-                            ForEach(viewModel.pages, id: \.pageid) { page in
-                                Text(page.title)
-                                    .font(.headline)
-                                + Text(": ") +
-                                Text(page.description)
-                                    .italic()
-                            }
-                        case .loading:
-                            Text("Loading...")
-                        case .failed:
-                            Text("Please try again later.")
-                        }
+                    viewModel.getNearbyResults()
                 }
             }
             .navigationTitle("Place details")
             .toolbar {
                 Button("Save") {
-                    var newLocation = viewModel.location
-                    newLocation.id = UUID()
-                    newLocation.name = viewModel.name
-                    newLocation.description = viewModel.description
-                    
-                    onSave(newLocation)
+                    onSave(viewModel.createLocatin())
                     dismiss()
                 }
             }

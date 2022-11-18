@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            if !viewModel.isUnlocked {
+            if viewModel.isUnlocked {
                 Map(coordinateRegion: $viewModel.mapRegion, annotationItems: viewModel.locations) { location in
                     MapAnnotation(coordinate: location.coordinate) {
                         VStack {
@@ -39,19 +39,22 @@ struct ContentView: View {
                     .frame(width: 32, height: 32)
                 VStack {
                     Spacer()
+                    
                     HStack {
                         Spacer()
                         
-                        Image(systemName: "plus")
-                        .padding()
-                        .background(.black.opacity(0.75))
-                        .foregroundColor(.white)
-                        .font(.title)
-                        .clipShape(Circle())
-                        .padding(.trailing)
-                        .onTapGesture {
+                        Button {
                             viewModel.addLocation()
+                        } label: {
+                            Image(systemName: "plus")
+                                .padding()
+                                .background(.black.opacity(0.75))
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .clipShape(Circle())
+                                .padding(.trailing)
                         }
+                        
                     }
                 }
             } else {
@@ -62,6 +65,13 @@ struct ContentView: View {
                 .background(.blue)
                 .foregroundColor(.white)
                 .clipShape(Capsule())
+                .alert("Authentication Error!", isPresented:
+                        $viewModel.showingError) {
+                    Button("OK") { }
+                    
+                } message: {
+                    Text("\(viewModel.errorMessage)")
+                }
             }
             
         }
@@ -70,12 +80,6 @@ struct ContentView: View {
                 viewModel.update(location: $0)
             }
         }
-        .alert("Error!", isPresented: $viewModel.showingError, actions: {
-            
-        }, message: {
-            Text("\(viewModel.errorMessage)")
-        })
-        
     }
 }
 

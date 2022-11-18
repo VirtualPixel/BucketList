@@ -49,8 +49,8 @@
 		573E05BA2924FCBF00C7C523 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				573E05B82924FC8E00C7C523 /* EditView-ViewModel.swift */,
 				57AB1D25292264F50025A97E /* ContentView-ViewModel.swift */,
+				573E05B82924FC8E00C7C523 /* EditView-ViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
