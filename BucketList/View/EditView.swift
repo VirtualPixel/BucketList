@@ -23,19 +23,19 @@ struct EditView: View {
                 
                 Section("Nearby...") {
                     switch viewModel.loadingState {
-                    case .loaded:
-                        ForEach(viewModel.pages, id: \.pageid) { page in
-                            Text(viewModel.page.title)
-                                .font(.headline)
-                            + Text(": ") +
-                            Text(viewModel.page.description)
-                                .italic()
+                        case .loaded:
+                            ForEach(viewModel.pages, id: \.pageid) { page in
+                                Text(page.title)
+                                    .font(.headline)
+                                + Text(": ") +
+                                Text(page.description)
+                                    .italic()
+                            }
+                        case .loading:
+                            Text("Loading...")
+                        case .failed:
+                            Text("Please try again later.")
                         }
-                    case .loading:
-                        Text("Loading...")
-                    case .failed:
-                        Text("Please try again later.")
-                    }
                 }
             }
             .navigationTitle("Place details")
@@ -57,17 +57,9 @@ struct EditView: View {
     }
     
     init(location: Location, onSave: @escaping (Location) -> Void) {
-        //self.location = location
         self.onSave = onSave
-        
-        
-        //_viewModel = ViewModel(location: location)
-        
-        //_name = State(initialValue: location.name)
-        //_description = State(initialValue: location.description)
+        _viewModel = StateObject(wrappedValue: ViewModel(location: location))
     }
-    
-    
 }
 
 struct EditView_Previews: PreviewProvider {
